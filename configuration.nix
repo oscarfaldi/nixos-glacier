@@ -109,7 +109,7 @@
     enable = true;
 
     cache = {
-      hostName = "ncps.local";
+      hostName = "glacier";
       maxSize = "50G";
       dataPath = "/var/lib/ncps";
     };
