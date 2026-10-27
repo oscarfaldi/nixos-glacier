@@ -110,8 +110,23 @@
 
     cache = {
       hostName = "glacier";
-      maxSize = "50G";
+      maxSize = "40G";
       dataPath = "/var/lib/ncps";
+
+      # Allow `nix copy --to` so locally built paths (unfree packages such as
+      # obsidian, nvidia-x11, steam and cloudflare-warp) can be pushed here and
+      # substituted on every later install instead of being rebuilt from the
+      # vendor download each time.
+      allowPutVerb = true;
+
+      # Make the signing key explicit instead of auto-generated. If ncps ever
+      # regenerated its key, every client trusting glacier:Uzkm... would start
+      # rejecting this cache's narinfos while the cache itself looked healthy.
+      secretKeyPath = "/var/lib/ncps/config/cache.key";
+
+      # Without a schedule the size limit is never enforced; the store had
+      # already grown past 24G on a 59G disk.
+      lru.schedule = "0 3 * * *";
     };
 
     upstream = {
